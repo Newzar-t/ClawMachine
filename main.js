@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+/* import { animate } from 'animejs'; */
 
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x005d9c)
@@ -49,6 +50,7 @@ let smooth = 0.1;
 window.addEventListener("keydown", (event) => {
     
     if(event.code === "ArrowUp"){
+
     claw.position.z -= speed;
     }
     if(event.code === "ArrowDown"){
