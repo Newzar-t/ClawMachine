@@ -97,6 +97,9 @@ scene.add(glassMesh);
 
     scene.add(floor)
 
+
+
+
 /*---- gacha boule *----*/
 
 async function initPhysics(){
@@ -183,7 +186,26 @@ function makeSphere(newColor){
     scene.add(sphere)
 }
 
+
+
+
 initPhysics()
+
+/*--- dropping area ----*/
+
+let dropBox;
+
+loader.load("/droppingArea.glb", (gltf) => {
+ dropBox = gltf.scene;
+ dropBox.traverse((child) => {
+    if(child.isMesh){
+        console.log(child)
+        physics.addMesh(child,0,0);
+        child.position.set(2.6, -2.5, -2.6);
+        scene.add(child)
+    }
+ })
+})
 
 function movingClaw(){
 
@@ -309,6 +331,7 @@ let raycaster = new THREE.Raycaster();
 const downDir = new THREE.Vector3(0, -1, 0);
 
 let isGrabbed = false;
+let sphereCaught;
 
 function makeRaycast(upOrigin){
 upOrigin = new THREE.Vector3(upOrigin.x,0, upOrigin.z)
@@ -322,9 +345,10 @@ if(intersects.length > 0){
     let gift = intersects[0].object
     physics.removeMesh(gift);
     setTimeout(() => {
-        gsap.fromTo(gift.position, {y:0}, {y:clawGrab.position.y, duration: 2000});
-
-    },2000)
+        gsap.fromTo(gift.position, {y:gift.position.y}, {y:clawGrab.position.y - 1, duration:2, ease:'linear'});
+        gift.position.copy(clawGrab.position)
+    },1900)
+    sphereCaught = gift
 }
 else{
     isGrabbed = false;
@@ -346,9 +370,10 @@ makeRaycast(posXY)
   }))
   if(isGrabbed == false)
 {
-
+ return;
 } else if(isGrabbed == true){
 
+    tl.add(animate(clawBone.position))
 }
 }})
 
